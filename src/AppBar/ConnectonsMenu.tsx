@@ -16,21 +16,32 @@ interface ConnectionsMenuEntryProps {
 
 const ConnectionsMenuEntry = (props: ConnectionsMenuEntryProps) => {
   const dispatch = useAppDispatch();
-  const [connected, setConnected] = useState(false);
   const connection = useConnection(props.name);
+  const connectionConfig = useAppSelector(state => state.config.connections[props.name]);
+  const [connected, setConnected] = useState(connection ? connection.isConnected : false);
 
   useEffect(() => {
+    const connectListener = () => setConnected(true);
+    const disconnectListener = () => setConnected(false);
     if (connection) {
-      connection.addListener('connection', () => setConnected(true));
-      connection.addListener('close', () => setConnected(false));
+      connection.addListener('connection', connectListener);
+      connection.addListener('close', disconnectListener);
+    }
+
+    return () => {
+      if (connection) {
+        connection.removeListener('connection', connectListener);
+        connection.removeListener('close', disconnectListener);
+      }
     }
   }, [connection]);
 
   return (
     <ListItem>
       <IconButton
-        onClick={() => dispatch(connectionRemoved(props.name))}
-        color={connected ? "success" : "error"}
+        onClick={() => connected ? connection.close() : connection.connect(connectionConfig.url)}
+        color={connected ? "success" : connection ? "error" : "warning"}
+        disabled={!connection}
       >
         <ConnectionIcon />
       </IconButton>
