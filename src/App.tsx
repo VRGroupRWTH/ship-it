@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { createTheme } from '@mui/material';
@@ -6,7 +6,12 @@ import { Box, ThemeProvider } from '@mui/system';
 import { configUpdated } from './features/config/config-slice';
 import AppBar from './AppBar';
 import { useNonInitialEffect } from './hooks/useNonInitialEffect';
-import RosbridgeConnections from './RosbridgeConnections';
+import RosbridgeConnections, { RosbridgeConnectionsContext, useConnection } from './RosbridgeConnections';
+import { Canvas } from '@react-three/fiber';
+import Crawler from './Crawler';
+import SkyBox from './SkyBox';
+import Water from './Water';
+import OrbitControls from './OrbitControls';
 
 // import { Buffer } from 'buffer';
 // Buffer.from('anything','base64');
@@ -47,38 +52,40 @@ function App() {
   useNonInitialEffect(() => {
     navigate(`?config=${btoa(JSON.stringify(config))}`);
   }, [config]);
+  const ros = useConnection('New Connection');
 
   return (
-   <RosbridgeConnections>
-     <ThemeProvider theme={darkMode ? darkTheme: lightTheme}>
+   <ThemeProvider theme={darkMode ? darkTheme: lightTheme}>
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          color: 'white',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <AppBar
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
         <Box
           sx={{
-            width: '100%',
-            height: '100%',
-            color: 'white',
-            display: 'flex',
-            flexDirection: 'column',
+            flexGrow: 1,
           }}
         >
-          <AppBar
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-          />
-          <Box
-            sx={{
-              flexGrow: 1,
-            }}
-          >
-            <canvas
-              width={100}
-              height={100}
-            >
-              Please update your browser!
-            </canvas>
-          </Box>
+          <Canvas>
+            <OrbitControls />
+            <SkyBox baseURL="skyboxes/clouds" />
+            <Water width={1000} height={1000} waterNormalsTexture="waternormals.jpg" />
+            <camera position={[0, 0, 50]} rotation={[0, 0, 0]} />
+            <ambientLight />
+            <pointLight position={[10, 10, 10]} />
+            <Crawler ros={ros} />
+          </Canvas>
         </Box>
-      </ThemeProvider>
-    </RosbridgeConnections>
+      </Box>
+    </ThemeProvider>
   );
 }
 

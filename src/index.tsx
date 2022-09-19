@@ -5,12 +5,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from './app/store';
 import App from './App'
 import './index.css'
+import RosbridgeConnections from './RosbridgeConnections';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <RosbridgeConnections>
+          <App />
+        </RosbridgeConnections>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

@@ -46,7 +46,10 @@ export function useTopic<T = Message>(ros: Ros, topicName: string, topicType: st
   const [message, setMessage] = useState<T|undefined>();
 
   useEffect(() => {
-    setTopic(new Topic<T>({ ros, name: topicName, messageType: topicType }));
+    if (ros) {
+      setTopic(new Topic<T>({ ros, name: topicName, messageType: topicType }));
+    }
+    return () => setTopic(null);
   }, [ros, topicName, topicType]);
   useEffect(() => {
     if (topic && subscribe) {
@@ -60,4 +63,4 @@ export function useTopic<T = Message>(ros: Ros, topicName: string, topicType: st
 }
 
 export default RosbridgeConnections;
-export { useConnection };
+export { RosbridgeConnectionsContext, useConnection };
