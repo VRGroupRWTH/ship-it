@@ -8,6 +8,7 @@ import For from "../For";
 import Show from "../Show";
 import { ConnectionConfig, connectionRemoved } from "../features/config/config-slice";
 import { useConnection } from "../RosbridgeConnections";
+import ConnectionInfoDialog from "./ConnectionInfoDialog";
 
 interface ConnectionsMenuEntryProps {
  name: string;
@@ -19,6 +20,7 @@ const ConnectionsMenuEntry = (props: ConnectionsMenuEntryProps) => {
   const connection = useConnection(props.name);
   const connectionConfig = useAppSelector(state => state.config.connections[props.name]);
   const [connected, setConnected] = useState(connection ? connection.isConnected : false);
+  const [connectionInfoOpen, setConnectionInfoOpen] = useState(false);
 
   useEffect(() => {
     const connectListener = () => setConnected(true);
@@ -45,12 +47,19 @@ const ConnectionsMenuEntry = (props: ConnectionsMenuEntryProps) => {
       >
         <ConnectionIcon />
       </IconButton>
-      <ListItemButton>{props.name}</ListItemButton>
+      <ListItemButton onClick={() => setConnectionInfoOpen(true)}>
+        {props.name}
+      </ListItemButton>
       <IconButton
         onClick={() => dispatch(connectionRemoved(props.name))}
       >
         <Delete />
       </IconButton>
+      <ConnectionInfoDialog
+        connection={props.name}
+        open={connectionInfoOpen}
+        close={() => setConnectionInfoOpen(false)}
+      />
     </ListItem>
   );
 };
