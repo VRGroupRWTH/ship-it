@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
-import { Ros } from "roslib";
+import { Message, Ros, Topic } from "roslib";
 import { useAppSelector } from './app/hooks';
 
 type RosbridgeConnectionMap = {[key: string]: Ros};
@@ -40,6 +40,24 @@ const useConnection = (name: string) => {
   const connections = useContext(RosbridgeConnectionsContext);
   return connections[name] || null;
 };
+
+export function useTopic<T = Message>(ros: Ros, topicName: string, topicType: string, subscribe?: boolean) {
+  const [topic, setTopic] = useState<Topic<T>|null>(null);
+  const [message, setMessage] = useState<T|undefined>();
+
+  useEffect(() => {
+    setTopic(new Topic<T>({ ros, name: topicName, messageType: topicType }));
+  }, [ros, topicName, topicType]);
+  useEffect(() => {
+    if (topic && subscribe) {
+      const theTopic = topic;
+      theTopic.subscribe(setMessage);
+      return () => theTopic.unsubscribe();
+    }
+  }, [topic, subscribe]);
+
+  return message;
+}
 
 export default RosbridgeConnections;
 export { useConnection };
