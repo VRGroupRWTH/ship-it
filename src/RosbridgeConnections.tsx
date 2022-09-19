@@ -19,6 +19,11 @@ const RosbridgeConnections = (props: PropsWithChildren) => {
         newConnections[connectionName] = new Ros({ url: connectionConfigs[connectionName].url });
       }
     }
+    for (const oldConnection of Object.keys(connections)) {
+      if (!(oldConnection in newConnections)) {
+        connections[oldConnection].close();
+      }
+    }
     setConnections(newConnections);
   }, [connectionConfigs]);
 
