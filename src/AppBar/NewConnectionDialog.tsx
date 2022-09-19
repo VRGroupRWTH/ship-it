@@ -15,7 +15,7 @@ const NewConnectionDialog = (props: NewConnectionDialogProps) => {
   const connections = useAppSelector(state => state.config.connections);
   const dispatch = useAppDispatch();
   const [name, setName] = useState("New Connection");
-  const [url, setURL] = useState("wss://localhost:9090");
+  const [url, setURL] = useState("ws://localhost:9090");
 
   return (
     <Dialog
