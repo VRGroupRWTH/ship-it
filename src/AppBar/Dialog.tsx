@@ -27,6 +27,8 @@ const Dialog = (props: DialogProps) => {
           transform: "translate(-50%, -50%)",
           width: props.width,
           height: props.height,
+          maxWidth: "90%",
+          maxHeight: "85%",
           bgcolor: theme.palette.background.paper,
           border: "2px solid #000",
           boxShadow: "24px",
