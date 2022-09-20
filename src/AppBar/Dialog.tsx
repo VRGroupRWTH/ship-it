@@ -20,6 +20,7 @@ const Dialog = (props: DialogProps) => {
       open={props.open}
     >
       <Box
+        component="div"
         sx={{
           position: "absolute",
           top: "50%",
@@ -38,12 +39,14 @@ const Dialog = (props: DialogProps) => {
         }}
       >
         <Box
+          component="div"
           sx={{
           display: "flex",
           flexDirection: "row",
           }}
         >
           <Box
+            component="div"
             sx={{
               flexGrow: 1
             }}
@@ -54,7 +57,9 @@ const Dialog = (props: DialogProps) => {
             }
             </h1>
           </Box>
-          <Box>
+          <Box
+            component="div"
+          >
             <IconButton
               size="large"
               edge="start"
@@ -69,6 +74,7 @@ const Dialog = (props: DialogProps) => {
           </Box>
         </Box>
         <Box
+          component="div"
           sx={{
             overflow: "auto"
           }}
