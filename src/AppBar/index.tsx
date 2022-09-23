@@ -2,6 +2,7 @@ import { AppBar as MUIAppBar, IconButton, Switch } from '@mui/material';
 import { DarkMode, LightMode, SmartToy as RobotIcon } from '@mui/icons-material';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import ConnectionsMenu from './ConnectonsMenu';
+import CameraMenu from './CameraMenu';
 
 export interface AppBarProps {
   darkMode: boolean,
@@ -14,9 +15,7 @@ function AppBar(props: AppBarProps) {
       <Grid2 container>
         <Grid2>
           <ConnectionsMenu />
-          <IconButton aria-label="manage robots">
-            <RobotIcon />
-          </IconButton>
+          <CameraMenu />
         </Grid2>
         <Grid2 xs>
         </Grid2>

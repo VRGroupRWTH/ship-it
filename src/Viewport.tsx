@@ -3,21 +3,29 @@ import { Controllers, Hands, RayGrab, VRButton, XR } from '@react-three/xr';
 import Crawler from './Crawler';
 import SkyBox from './SkyBox';
 import Water from './Water';
-import OrbitControls from './OrbitControls';
+import { OrbitControls, FirstPersonControls } from './Controls';
 import { useConnection } from './RosbridgeConnections';
 import Show from './Show';
 import { useState } from 'react';
 import Mesh from './Mesh';
+import { useAppSelector } from './app/hooks';
 
 const Viewport = () => {
   const ros = useConnection('New Connection');
+  const cameraControls = useAppSelector(state => state.camera.controls);
   const [isInXr, setIsInXr] = useState(false);
 
   return (
     <>
       <VRButton />
       <Canvas tabIndex={0}>
-        <Show when={isInXr} fallback={<OrbitControls />}>
+        <Show when={!isInXr}>
+          <Show when={cameraControls === 'orbit'}>
+            <OrbitControls />
+          </Show>
+          <Show when={cameraControls === 'first-person'}>
+            <FirstPersonControls />
+          </Show>
           <></>
         </Show>
         <XR
