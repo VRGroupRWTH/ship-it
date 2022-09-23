@@ -51,7 +51,9 @@ const TopicInfo = (props: TopicInfoProps) => {
         </Link>
       </ListItem>
       <Show when={shouldSubscribe}>
-        <pre style={{ margin: 0 }}>{ JSON.stringify(message, undefined, 2) }</pre>
+        <Show when={message} fallback={<CircularProgress />}>
+          <pre style={{ margin: 0 }}>{ JSON.stringify(message, undefined, 2) }</pre>
+        </Show>
       </Show>
     </>
   );
@@ -114,7 +116,7 @@ const ConnectionInfoDialog = (props: ConnectionInfoDialogProps) => {
         <List>
           <For each={topics}>
           {
-          topic => <TopicInfo topic={topic} rosDistro={rosdistro} ros={connection} />
+          topic => <TopicInfo key={`${props.connection}${topic.name}`} topic={topic} rosDistro={rosdistro} ros={connection} />
           }
           </For>
         </List>
