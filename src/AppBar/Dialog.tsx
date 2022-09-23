@@ -9,8 +9,8 @@ export interface DialogProps extends PropsWithChildren {
   open: boolean;
   close?: () => void;
   title?: string;
-  width?: number;
-  height?: number;
+  width?: number|string;
+  height?: number|string;
 }
 
 const Dialog = (props: DialogProps) => {
