@@ -7,6 +7,7 @@ import OrbitControls from './OrbitControls';
 import { useConnection } from './RosbridgeConnections';
 import Show from './Show';
 import { useState } from 'react';
+import Mesh from './Mesh';
 
 const Viewport = () => {
   const ros = useConnection('New Connection');
@@ -29,9 +30,8 @@ const Viewport = () => {
           <Water width={1000} height={1000} waterNormalsTexture="waternormals.jpg" />
           <ambientLight />
           <pointLight position={[10, 10, 10]} />
-          <RayGrab>
-            <Crawler ros={ros} />
-          </RayGrab>
+          <Crawler ros={ros} />
+          <Mesh ros={ros} topic="/leica_pts_parser/mesh" />
         </XR>
       </Canvas>
     </>
