@@ -27,28 +27,33 @@ function Crawler(props: CrawlerProps) {
   // useFrame((state, delta) => ref.current.rotation.x += 0.01);
   // Return the view, these are regular Threejs elements expressed in JSX
   //
-  const position = useTopic<Vector3>(props.ros, '/pioneer/OffsetPosition', 'geometry_msgs/Vector3', true);
+  const poseStamped = useTopic<{ pose: { position: {x: number, y: number, z: number }, orientation: {w: number, x: number, y: number, z: number }}}>(props.ros, '/mesh_pf1/pose', 'geometry_msgs/PoseStamped', true);
+  const position: [number, number, number] = [-(poseStamped?.pose.position.x || 0), poseStamped?.pose.position.z || 0, poseStamped?.pose.position.y || 0];
+  const orientation: [number, number, number, number] = [poseStamped?.pose.orientation.x || 0, poseStamped?.pose.orientation.y || 0, poseStamped?.pose.orientation.z || 0, poseStamped?.pose.orientation.w || 1];
+  const sd: [number, number, number, number] = [
+    -orientation[0],
+    orientation[2],
+    orientation[1],
+    orientation[3],
+  ];
 
-  // return (
-  //   <mesh
-  //     position={[position?.x || 0, position?.y || 0, position?.z || 0]}
-  //     ref={ref}
-  //     scale={clicked ? 1.5 : 1}
-  //     onClick={(event) => click(!clicked)}
-  //     onPointerOver={(event) => hover(true)}
-  //     onPointerOut={(event) => hover(false)}>
-  //     <boxGeometry args={[1, 1, 1]} />
-  //     <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-  //   </mesh>
-  // )
+  const q = new Quaternion();
+  q.setFromEuler(new Euler(0, -Math.PI / 2, Math.PI), true);
+
   return (
     <group
-      position={[position?.x || 0, position?.y || 0, position?.z || 0]}
-      scale={[10, 10, 10]}
+      position={position}
+      quaternion={sd}
+      scale={[1, 1, 1]}
     >
-      <primitive
-        object={model}
-      />
+      <group
+        position={[0, 0.1, 0]}
+        quaternion={q}
+      >
+        <primitive
+          object={model}
+        />
+      </group>
     </group>
   );
 }
