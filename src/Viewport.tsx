@@ -9,6 +9,7 @@ import Show from './Show';
 import { useState } from 'react';
 import Mesh from './Mesh';
 import { useAppSelector } from './app/hooks';
+import PointCloud from './PointCloud';
 
 const Viewport = () => {
   const ros = useConnection('New Connection');
@@ -40,6 +41,7 @@ const Viewport = () => {
           <pointLight position={[10, 10, 10]} />
           <Crawler ros={ros} />
           <Mesh ros={ros} topic="/leica_pts_parser/mesh" />
+          <PointCloud ros={ros} topic="thickness_measurements_pcl" />
         </XR>
       </Canvas>
     </>
