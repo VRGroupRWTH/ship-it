@@ -3,7 +3,7 @@ import { Controllers, Hands, RayGrab, VRButton, XR } from '@react-three/xr';
 import Crawler from './Crawler';
 import SkyBox from './SkyBox';
 import Water from './Water';
-import { OrbitControls, FirstPersonControls } from './Controls';
+import { OrbitControls, FirstPersonControls, FlyControls } from './Controls';
 import { useConnection } from './RosbridgeConnections';
 import Show from './Show';
 import { useState } from 'react';
